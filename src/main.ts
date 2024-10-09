@@ -9,11 +9,17 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
+const counterDiv = document.createElement("div");
+let counter = 0;
+counterDiv.innerHTML = `Coolness: ${counter}`;
+
 const button = document.createElement("button");
 button.innerHTML = "😎";
 
 button.addEventListener("click", () => {
-  alert("Button clicked!");
+    counter++;
+    counterDiv.innerHTML = `Coolness: ${counter}`;
 });
 
+app.append(counterDiv);
 app.append(button);
