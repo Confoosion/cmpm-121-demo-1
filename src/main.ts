@@ -17,7 +17,7 @@ const button = document.createElement("button");
 button.innerHTML = "😎";
 
 const updateCounter = () => {
-    counterDiv.innerHTML = `Coolness: ${counter}`;
+    counterDiv.innerHTML = `Coolness: ${counter.toFixed(2)}`;
 };
 
 button.addEventListener("click", () => {
@@ -25,10 +25,25 @@ button.addEventListener("click", () => {
     updateCounter();
 });
 
-setInterval(() => {
-    counter++;
+// setInterval(() => {
+//     counter++;
+//     updateCounter();
+// }, 1000);
+
+let lastFrame = performance.now();
+
+const incrementCounterPerFrame = (currentTime: number) => {
+    const deltaTime = (currentTime - lastFrame) / 1000;
+    lastFrame = currentTime;
+
+    const incrementPerSecond = 1;
+    counter += incrementPerSecond * deltaTime;
     updateCounter();
-}, 1000);
+
+    requestAnimationFrame(incrementCounterPerFrame);
+};
+
+requestAnimationFrame(incrementCounterPerFrame);
 
 app.append(counterDiv);
 app.append(button);
