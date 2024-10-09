@@ -16,10 +16,19 @@ counterDiv.innerHTML = `Coolness: ${counter}`;
 const button = document.createElement("button");
 button.innerHTML = "😎";
 
+const updateCounter = () => {
+    counterDiv.innerHTML = `Coolness: ${counter}`;
+};
+
 button.addEventListener("click", () => {
     counter++;
-    counterDiv.innerHTML = `Coolness: ${counter}`;
+    updateCounter();
 });
+
+setInterval(() => {
+    counter++;
+    updateCounter();
+}, 1000);
 
 app.append(counterDiv);
 app.append(button);
