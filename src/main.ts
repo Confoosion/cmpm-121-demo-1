@@ -19,6 +19,7 @@ growth.innerHTML = `${growthRate} Coolness/s`;
 
 const button = document.createElement("button");
 button.innerHTML = "😎";
+button.classList.add("main-button");
 
 let upgrade1Cost = 10;
 const upgrade1Button = document.createElement("button");
@@ -104,7 +105,9 @@ requestAnimationFrame(incrementCounterPerFrame);
 
 app.append(counterDiv);
 app.append(growth);
+
+app.append(button);
+
 app.append(upgrade1Button);
 app.append(upgrade2Button);
 app.append(upgrade3Button);
-app.append(button);
