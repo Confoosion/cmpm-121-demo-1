@@ -27,15 +27,18 @@ app.append(growth);
 app.append(button);
 
 interface Item {
-  name: string,
-  cost: number,
-  rate: number
-};
+  name: string;
+  cost: number;
+  rate: number;
+  description: string;
+}
 
-const availableItems : Item[] = [
-  {name: "🕶", cost: 10, rate: 0.1},
-  {name: "🎩", cost: 100, rate: 2},
-  {name: "💰", cost: 1000, rate: 50},
+const availableItems: Item[] = [
+  { name: "🕶", cost: 10, rate: 0.1, description: "Shades make you look cool. (0.1C/s)"},
+  { name: "🎩", cost: 100, rate: 2, description: "A hat is cooler than shades. (2C/s)"},
+  { name: "💰", cost: 1000, rate: 50, description: "Cash makes you super cool! (50C/s)"},
+  { name: "🚗", cost: 5000, rate: 200, description: "Driving a car is so much cooler. (200C/s)"},
+  { name: "🏆", cost: 10000, rate: 1000, description: "Winning an award is the coolest! (1000C/s)"},
 ];
 
 const upgradeButtons: HTMLButtonElement[] = [];
@@ -56,30 +59,33 @@ const upgradeButtons: HTMLButtonElement[] = [];
 // upgrade3Button.disabled = true;
 
 const updateCounter = () => {
-    counterDiv.innerHTML = `Coolness: ${counter.toFixed(2)}`;
+  counterDiv.innerHTML = `Coolness: ${counter.toFixed(2)}`;
 
-    availableItems.forEach((item, index) => {
-      upgradeButtons[index].disabled = counter < item.cost;
-    });
+  availableItems.forEach((item, index) => {
+    upgradeButtons[index].disabled = counter < item.cost;
+  });
 
-    // upgrade1Button.disabled = counter < upgrade1Cost;
-    // upgrade2Button.disabled = counter < upgrade2Cost;
-    // upgrade3Button.disabled = counter < upgrade3Cost;
+  // upgrade1Button.disabled = counter < upgrade1Cost;
+  // upgrade2Button.disabled = counter < upgrade2Cost;
+  // upgrade3Button.disabled = counter < upgrade3Cost;
 };
 
 const updateGrowthRate = () => {
-    growth.innerHTML = `${growthRate.toFixed(1)} Coolness/s`;
+  growth.innerHTML = `${growthRate.toFixed(1)} Coolness/s`;
 };
 
 button.addEventListener("click", () => {
-    counter++;
-    updateCounter();
+  counter++;
+  updateCounter();
 });
 
 availableItems.forEach((item) => {
   const upgradeButton = document.createElement("button");
-  upgradeButton.innerHTML = `Buy ${item.name} (+${item.rate} Coolness/s)`;
+  upgradeButton.innerHTML = `Buy ${item.name} (${item.cost} Coolness)`;
   upgradeButton.disabled = true;
+
+  const descriptionText = document.createElement("p");
+  descriptionText.innerText = item.description;
 
   upgradeButton.addEventListener("click", () => {
     if (counter >= item.cost) {
@@ -88,11 +94,13 @@ availableItems.forEach((item) => {
       item.cost *= 1.15;
       updateCounter();
       updateGrowthRate();
+      upgradeButton.innerHTML = `Buy ${item.name} (${item.cost.toFixed(2)} Coolness)`;
     }
   });
 
   upgradeButtons.push(upgradeButton);
   app.append(upgradeButton);
+  app.append(descriptionText);
 });
 
 // upgrade1Button.addEventListener("click", () => {
@@ -133,14 +141,14 @@ availableItems.forEach((item) => {
 let lastFrame = performance.now();
 
 const incrementCounterPerFrame = (currentTime: number) => {
-    const deltaTime = (currentTime - lastFrame) / 1000;
-    lastFrame = currentTime;
+  const deltaTime = (currentTime - lastFrame) / 1000;
+  lastFrame = currentTime;
 
-    const incrementPerSecond = growthRate;
-    counter += incrementPerSecond * deltaTime;
-    updateCounter();
+  const incrementPerSecond = growthRate;
+  counter += incrementPerSecond * deltaTime;
+  updateCounter();
 
-    requestAnimationFrame(incrementCounterPerFrame);
+  requestAnimationFrame(incrementCounterPerFrame);
 };
 
 requestAnimationFrame(incrementCounterPerFrame);
