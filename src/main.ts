@@ -20,14 +20,17 @@ growth.innerHTML = `${growthRate} Coolness/s`;
 const button = document.createElement("button");
 button.innerHTML = "😎";
 
+let upgrade1Cost = 10;
 const upgrade1Button = document.createElement("button");
 upgrade1Button.innerHTML = "Buy 🕶 (+0.1 Coolness/s)";
 upgrade1Button.disabled = true;
 
+let upgrade2Cost = 100;
 const upgrade2Button = document.createElement("button");
 upgrade2Button.innerHTML = "Buy 🎩 (+2 Coolness/s)";
 upgrade2Button.disabled = true;
 
+let upgrade3Cost = 1000;
 const upgrade3Button = document.createElement("button");
 upgrade3Button.innerHTML = "Buy 💰 (+50 Coolness/s)";
 upgrade3Button.disabled = true;
@@ -35,14 +38,14 @@ upgrade3Button.disabled = true;
 const updateCounter = () => {
     counterDiv.innerHTML = `Coolness: ${counter.toFixed(2)}`;
 
-    upgrade1Button.disabled = counter < 10;
-    upgrade2Button.disabled = counter < 100;
-    upgrade3Button.disabled = counter < 1000;
+    upgrade1Button.disabled = counter < upgrade1Cost;
+    upgrade2Button.disabled = counter < upgrade2Cost;
+    upgrade3Button.disabled = counter < upgrade3Cost;
 };
 
 const updateGrowthRate = () => {
     growth.innerHTML = `${growthRate.toFixed(1)} Coolness/s`;
-}
+};
 
 button.addEventListener("click", () => {
     counter++;
@@ -50,31 +53,34 @@ button.addEventListener("click", () => {
 });
 
 upgrade1Button.addEventListener("click", () => {
-    if(counter >= 10) {
-        counter -= 10;
+    if(counter >= upgrade1Cost) {
+        counter -= upgrade1Cost;
         growthRate += 0.1;
+        upgrade1Cost *= 1.15;
         updateCounter();
         updateGrowthRate();
     }
 });
 
 upgrade2Button.addEventListener("click", () => {
-    if(counter >= 100) {
-        counter -= 100;
+    if(counter >= upgrade2Cost) {
+        counter -= upgrade2Cost;
         growthRate += 2;
+        upgrade2Cost *= 1.15;
         updateCounter();
         updateGrowthRate();
     }
 });
 
 upgrade3Button.addEventListener("click", () => {
-    if(counter >= 1000) {
-        counter -= 1000;
+    if(counter >= upgrade3Cost) {
+        counter -= upgrade3Cost;
         growthRate += 50;
+        upgrade3Cost *= 1.15;
         updateCounter();
         updateGrowthRate();
     }
-})
+});
 
 // setInterval(() => {
 //     counter++;
