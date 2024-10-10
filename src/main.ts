@@ -21,27 +21,50 @@ const button = document.createElement("button");
 button.innerHTML = "😎";
 button.classList.add("main-button");
 
-let upgrade1Cost = 10;
-const upgrade1Button = document.createElement("button");
-upgrade1Button.innerHTML = "Buy 🕶 (+0.1 Coolness/s)";
-upgrade1Button.disabled = true;
+app.append(counterDiv);
+app.append(growth);
 
-let upgrade2Cost = 100;
-const upgrade2Button = document.createElement("button");
-upgrade2Button.innerHTML = "Buy 🎩 (+2 Coolness/s)";
-upgrade2Button.disabled = true;
+app.append(button);
 
-let upgrade3Cost = 1000;
-const upgrade3Button = document.createElement("button");
-upgrade3Button.innerHTML = "Buy 💰 (+50 Coolness/s)";
-upgrade3Button.disabled = true;
+interface Item {
+  name: string,
+  cost: number,
+  rate: number
+};
+
+const availableItems : Item[] = [
+  {name: "🕶", cost: 10, rate: 0.1},
+  {name: "🎩", cost: 100, rate: 2},
+  {name: "💰", cost: 1000, rate: 50},
+];
+
+const upgradeButtons: HTMLButtonElement[] = [];
+
+// let upgrade1Cost = 10;
+// const upgrade1Button = document.createElement("button");
+// upgrade1Button.innerHTML = "Buy 🕶 (+0.1 Coolness/s)";
+// upgrade1Button.disabled = true;
+
+// let upgrade2Cost = 100;
+// const upgrade2Button = document.createElement("button");
+// upgrade2Button.innerHTML = "Buy 🎩 (+2 Coolness/s)";
+// upgrade2Button.disabled = true;
+
+// let upgrade3Cost = 1000;
+// const upgrade3Button = document.createElement("button");
+// upgrade3Button.innerHTML = "Buy 💰 (+50 Coolness/s)";
+// upgrade3Button.disabled = true;
 
 const updateCounter = () => {
     counterDiv.innerHTML = `Coolness: ${counter.toFixed(2)}`;
 
-    upgrade1Button.disabled = counter < upgrade1Cost;
-    upgrade2Button.disabled = counter < upgrade2Cost;
-    upgrade3Button.disabled = counter < upgrade3Cost;
+    availableItems.forEach((item, index) => {
+      upgradeButtons[index].disabled = counter < item.cost;
+    });
+
+    // upgrade1Button.disabled = counter < upgrade1Cost;
+    // upgrade2Button.disabled = counter < upgrade2Cost;
+    // upgrade3Button.disabled = counter < upgrade3Cost;
 };
 
 const updateGrowthRate = () => {
@@ -53,35 +76,54 @@ button.addEventListener("click", () => {
     updateCounter();
 });
 
-upgrade1Button.addEventListener("click", () => {
-    if(counter >= upgrade1Cost) {
-        counter -= upgrade1Cost;
-        growthRate += 0.1;
-        upgrade1Cost *= 1.15;
-        updateCounter();
-        updateGrowthRate();
+availableItems.forEach((item) => {
+  const upgradeButton = document.createElement("button");
+  upgradeButton.innerHTML = `Buy ${item.name} (+${item.rate} Coolness/s)`;
+  upgradeButton.disabled = true;
+
+  upgradeButton.addEventListener("click", () => {
+    if (counter >= item.cost) {
+      counter -= item.cost;
+      growthRate += item.rate;
+      item.cost *= 1.15;
+      updateCounter();
+      updateGrowthRate();
     }
+  });
+
+  upgradeButtons.push(upgradeButton);
+  app.append(upgradeButton);
 });
 
-upgrade2Button.addEventListener("click", () => {
-    if(counter >= upgrade2Cost) {
-        counter -= upgrade2Cost;
-        growthRate += 2;
-        upgrade2Cost *= 1.15;
-        updateCounter();
-        updateGrowthRate();
-    }
-});
+// upgrade1Button.addEventListener("click", () => {
+//     if(counter >= upgrade1Cost) {
+//         counter -= upgrade1Cost;
+//         growthRate += 0.1;
+//         upgrade1Cost *= 1.15;
+//         updateCounter();
+//         updateGrowthRate();
+//     }
+// });
 
-upgrade3Button.addEventListener("click", () => {
-    if(counter >= upgrade3Cost) {
-        counter -= upgrade3Cost;
-        growthRate += 50;
-        upgrade3Cost *= 1.15;
-        updateCounter();
-        updateGrowthRate();
-    }
-});
+// upgrade2Button.addEventListener("click", () => {
+//     if(counter >= upgrade2Cost) {
+//         counter -= upgrade2Cost;
+//         growthRate += 2;
+//         upgrade2Cost *= 1.15;
+//         updateCounter();
+//         updateGrowthRate();
+//     }
+// });
+
+// upgrade3Button.addEventListener("click", () => {
+//     if(counter >= upgrade3Cost) {
+//         counter -= upgrade3Cost;
+//         growthRate += 50;
+//         upgrade3Cost *= 1.15;
+//         updateCounter();
+//         updateGrowthRate();
+//     }
+// });
 
 // setInterval(() => {
 //     counter++;
@@ -103,11 +145,6 @@ const incrementCounterPerFrame = (currentTime: number) => {
 
 requestAnimationFrame(incrementCounterPerFrame);
 
-app.append(counterDiv);
-app.append(growth);
-
-app.append(button);
-
-app.append(upgrade1Button);
-app.append(upgrade2Button);
-app.append(upgrade3Button);
+// app.append(upgrade1Button);
+// app.append(upgrade2Button);
+// app.append(upgrade3Button);
